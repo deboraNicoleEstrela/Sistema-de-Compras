@@ -37,6 +37,33 @@ Tente `py -m pytest` ou `python -m pytest`
 
 ***
 
+## 📋 Breve Explicação sobre as Funcionalidades Testadas
+**Os testes unitários foram estruturados no arquivo test_sistema_compras.py para validar tanto as regras de negócio quanto o comportamento defensivo e utilitário do sistema:**
+
+### 1. Cálculo do Valor Total (calcular_total):**
+- Soma correta da quantidade e preço unitário de múltiplos itens.
+- Lançamento de exceção (ValueError) para carrinhos vazios, preços negativos, quantidades zeradas/negativas ou chaves ausentes no dicionário.
+
+### 2. Aplicação de Desconto (aplicar_desconto):
+- Aplicação correta de descontos percentuais padrão (ex: 10%).
+- Casos limite: 0% de desconto (mantém valor total) e 100% (zera o valor total).
+- Validação defensiva para valores totais negativos e porcentagens fora da faixa de 0% a 100%.
+
+### 3. Elegibilidade de Frete Grátis (verificar_frete_gratis):
+- Liberação de frete grátis para compras com valor final a partir de R$ 100,00.
+- Cobrança de frete para valores abaixo de R$ 100,00.
+- Tratamento defensivo para entradas inválidas/negativas.
+
+### 4. Histórico e ID Autoincrementado (registrar_compra):
+- Garantia de atribuição de IDs incrementais sequenciais (1, 2, 3...) a cada fechamento de pedido.
+- Preservação da integridade dos dados registrados (imutabilidade do histórico após alterações no carrinho).
+- Interface e Cancelamento (solicitar_input e exibir_carrinho):
+- Validação de fluxos de interrupção e cancelamento (quando o usuário digita c ou cancelar).
+- Renderização segura da exibição visual do carrinho (vazio ou preenchido).
+
+
+***
+
 
 ## 🔥 Testes Específicos Realizados
 
