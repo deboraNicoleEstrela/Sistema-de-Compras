@@ -1,0 +1,207 @@
+
+# 🛒 Sistema de Gerenciamento de Compras e Carrinho
+
+**Este projeto consiste em uma aplicação interativa via terminal para gerenciamento de compras, carrinho de itens, descontos e cálculo de frete, acompanhada por uma suíte completa de testes unitários automatizados.**
+
+
+***
+
+
+## 👨‍🎓 Informações da Aluna
+
+* **Nome:** Débora Nicole Estrela Lopes Nunes de Brito
+* **Unidade Curricular:** Teste de Sistemas
+* **Professor:** Yanes Nascimento
+* **Curso:** Desenvolvimento de Sistemas
+* **Turma:** T04
+* **Módulo:** Quarto Módulo
+* **Linguagem Utilizada:** Python 3.14.7
+* **Framework/Biblioteca de Testes:** `pytest` (com suporte nativo a `unittest.mock`)
+
+
+***
+
+
+## 🚀 Como Executar a Aplicação e os Testes
+
+### Pré-requisito
+**Certifique-se de ter o Python 3.14.7 e o Pytest 9.1.1 instalado em seu ambiente.**
+
+### Passo a Passo
+1. Abra o terminal na pasta raiz onde o arquivo `sistema_compras.py` está localizado.**
+2. Execute o seguinte comando para rodar todos os testes mostrando-os em detalhes:
+Tente `py -m pytest -v` ou `python -m pytest -v`
+3. Para apenas rodar os testes sem detalhamento:
+Tente `py -m pytest` ou `python -m pytest`
+
+
+***
+
+
+## 🔥 Testes Específicos Realizados
+
+### 1. Como Provocar uma Falha no Código da Aplicação
+**Para demonstrar a falha, altere propositalmente o cálculo de frete grátis no arquivo sistema_compras.py.**
+
+**Altere o operador de maior ou igual (>=) para apenas maior (>), o que faz com que compras de exatamente R$ 100,00 passem a cobrar frete indevidamente. Veja abaixo:**
+
+def verificar_frete_gratis(self, valor_final: float) -> bool:
+    """Verifica elegibilidade para frete grátis."""
+    if valor_final < 0:
+        raise ValueError("O valor final não pode ser negativo.")
+
+    # ❌ BUG PROVOCADO NA LINHA SEGUINTE:
+    return valor_final > self.valor_minimo_frete_gratis
+
+
+### 2. Execução dos Testes com a Falha
+**Ao rodar o comando pytest -v no terminal, o teste de valor limite exato falha. Veja abaixo:**
+
+PS D:\Users\User\Desktop\sistema> py -m pytest -v
+============================================================ test session starts =============================================================
+platform win32 -- Python 3.14.7, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Users\User\Desktop\sistema
+collected 23 items                                                                                                                            
+
+test_sistema_compras.py::test_calcular_total_com_sucesso PASSED                                                                         [  4%]
+test_sistema_compras.py::test_calcular_total_carrinho_vazio_lanca_excecao PASSED                                                        [  8%]
+test_sistema_compras.py::test_calcular_total_preco_negativo_lanca_excecao PASSED                                                        [ 13%]
+test_sistema_compras.py::test_calcular_total_quantidade_invalida_lanca_excecao PASSED                                                   [ 17%]
+test_sistema_compras.py::test_calcular_total_chaves_ausentes_lanca_excecao PASSED                                                       [ 21%]
+test_sistema_compras.py::test_aplicar_desconto_sucesso PASSED                                                                           [ 26%]
+test_sistema_compras.py::test_aplicar_desconto_zero_porcento PASSED                                                                     [ 30%]
+test_sistema_compras.py::test_aplicar_desconto_cem_porcento PASSED                                                                      [ 34%]
+test_sistema_compras.py::test_aplicar_desconto_valor_total_negativo_lanca_excecao PASSED                                                [ 39%]
+test_sistema_compras.py::test_aplicar_desconto_porcentagem_fora_dos_limites[-5.0] PASSED                                                [ 43%]
+test_sistema_compras.py::test_aplicar_desconto_porcentagem_fora_dos_limites[105.0] PASSED                                               [ 47%]
+test_sistema_compras.py::test_verificar_frete_gratis_elegivel PASSED                                                                    [ 52%]
+test_sistema_compras.py::test_verificar_frete_gratis_limite_exato FAILED                                                                [ 56%]
+test_sistema_compras.py::test_verificar_frete_gratis_nao_elegivel PASSED                                                                [ 60%]
+test_sistema_compras.py::test_verificar_frete_gratis_valor_negativo_lanca_excecao PASSED                                                [ 65%]
+test_sistema_compras.py::test_registrar_compra_autoincremento_id PASSED                                                                 [ 69%]
+test_sistema_compras.py::test_registrar_compra_copia_independente_do_carrinho PASSED                                                    [ 73%]
+test_sistema_compras.py::test_solicitar_input_retorna_none_ao_cancelar[c] PASSED                                                        [ 78%]
+test_sistema_compras.py::test_solicitar_input_retorna_none_ao_cancelar[C] PASSED                                                        [ 82%]
+test_sistema_compras.py::test_solicitar_input_retorna_none_ao_cancelar[cancelar] PASSED                                                 [ 86%]
+test_sistema_compras.py::test_solicitar_input_retorna_none_ao_cancelar[CANCELAR] PASSED                                                 [ 91%]
+test_sistema_compras.py::test_solicitar_input_retorna_string_valida PASSED                                                              [ 95%]
+test_sistema_compras.py::test_exibir_carrinho_vazio_e_com_itens PASSED                                                                  [100%]
+
+================================================================== FAILURES ==================================================================
+__________________________________________________ test_verificar_frete_gratis_limite_exato __________________________________________________
+
+sistema = <sistema_compras.SistemaCompras object at 0x0000026A8FD46510>
+
+    def test_verificar_frete_gratis_limite_exato(sistema):
+        """Verifica no limite exato da regra (R$ 100.00)."""
+>       assert sistema.verificar_frete_gratis(100.0) is True
+E       assert False is True
+E        +  where False = verificar_frete_gratis(100.0)
+E        +    where verificar_frete_gratis = <sistema_compras.SistemaCompras object at 0x0000026A8FD46510>.verificar_frete_gratis
+
+test_sistema_compras.py:108: AssertionError
+========================================================== short test summary info ===========================================================
+FAILED test_sistema_compras.py::test_verificar_frete_gratis_limite_exato - assert False is True
+======================================================== 1 failed, 22 passed in 0.27s ========================================================
+PS D:\Users\User\Desktop\sistema> 
+
+
+### 3. Identificação e Motivo da Falha
+**Teste que falhou: test_verificar_frete_gratis_limite_exato**
+
+**Motivo da falha: O teste espera que uma compra com o valor final de R$ 100.00 retorne True (elegível para frete grátis), respeitando a regra de negócio "Frete grátis para compras a partir de R$ 100,00".**
+
+**Por conta da alteração do operador para > (estritamente maior), o método retornou False, gerando a falha de asserção AssertionError: assert False is True.**
+
+
+### 4. Como Corrigir o Código da Aplicação
+**Restaurando a condição original no arquivo sistema_compras.py, assim garantindo que o valor limite de R$ 100.00 volte a ser incluído na regra (>=).**
+
+def verificar_frete_gratis(self, valor_final: float) -> bool:
+    """Verifica elegibilidade para frete grátis."""
+    if valor_final < 0:
+        raise ValueError("O valor final não pode ser negativo.")
+
+    # ✅ BUG CORRIGIDO:
+    return valor_final >= self.valor_minimo_frete_gratis
+
+
+### 5. Reexecução dos Testes e Aprovação Geral
+**Executando o pytest -v novamente após aplicar a correção:**
+
+PS D:\Users\User\Desktop\sistema> py -m pytest -v
+==================================================== test session starts ====================================================
+platform win32 -- Python 3.14.7, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\User\AppData\Local\Python\pythoncore-3.14-64\python.exe
+cachedir: .pytest_cache
+rootdir: D:\Users\User\Desktop\sistema
+collected 23 items                                                                                                           
+
+test_sistema_compras.py::test_calcular_total_com_sucesso PASSED                                                        [  4%]
+test_sistema_compras.py::test_calcular_total_carrinho_vazio_lanca_excecao PASSED                                       [  8%]
+test_sistema_compras.py::test_calcular_total_preco_negativo_lanca_excecao PASSED                                       [ 13%]
+test_sistema_compras.py::test_calcular_total_quantidade_invalida_lanca_excecao PASSED                                  [ 17%]
+test_sistema_compras.py::test_calcular_total_chaves_ausentes_lanca_excecao PASSED                                      [ 21%]
+test_sistema_compras.py::test_aplicar_desconto_sucesso PASSED                                                          [ 26%]
+test_sistema_compras.py::test_aplicar_desconto_zero_porcento PASSED                                                    [ 30%]
+test_sistema_compras.py::test_aplicar_desconto_cem_porcento PASSED                                                     [ 34%]
+test_sistema_compras.py::test_aplicar_desconto_valor_total_negativo_lanca_excecao PASSED                               [ 39%]
+test_sistema_compras.py::test_aplicar_desconto_porcentagem_fora_dos_limites[-5.0] PASSED                               [ 43%]
+test_sistema_compras.py::test_aplicar_desconto_porcentagem_fora_dos_limites[105.0] PASSED                              [ 47%]
+test_sistema_compras.py::test_verificar_frete_gratis_elegivel PASSED                                                   [ 52%]
+test_sistema_compras.py::test_verificar_frete_gratis_limite_exato PASSED                                               [ 56%]
+test_sistema_compras.py::test_verificar_frete_gratis_nao_elegivel PASSED                                               [ 60%]
+test_sistema_compras.py::test_verificar_frete_gratis_valor_negativo_lanca_excecao PASSED                               [ 65%]
+test_sistema_compras.py::test_registrar_compra_autoincremento_id PASSED                                                [ 69%]
+test_sistema_compras.py::test_registrar_compra_copia_independente_do_carrinho PASSED                                   [ 73%]
+test_sistema_compras.py::test_solicitar_input_retorna_none_ao_cancelar[c] PASSED                                       [ 78%]
+test_sistema_compras.py::test_solicitar_input_retorna_none_ao_cancelar[C] PASSED                                       [ 82%]
+test_sistema_compras.py::test_solicitar_input_retorna_none_ao_cancelar[cancelar] PASSED                                [ 86%]
+test_sistema_compras.py::test_solicitar_input_retorna_none_ao_cancelar[CANCELAR] PASSED                                [ 91%]
+test_sistema_compras.py::test_solicitar_input_retorna_string_valida PASSED                                             [ 95%]
+test_sistema_compras.py::test_exibir_carrinho_vazio_e_com_itens PASSED                                                 [100%]
+
+==================================================== 23 passed in 0.07s =====================================================
+PS D:\Users\User\Desktop\sistema> 
+
+Aqui estão as respostas fundamentadas para as suas perguntas de reflexão, com foco na arquitetura e na suíte de testes que desenvolvemos para a aplicação:
+
+
+***
+
+
+## 🧠 Perguntas para Reflexão
+
+### a. Qual linguagem e framework você escolheu? Por quê?
+
+* **Linguagem:** **Python 3**. Escolhida pela sua sintaxe limpa, alto nível de legibilidade e facilidade para estruturar tanto scripts de terminal interativos quanto regras de negócio concisas.
+* **Framework de Testes:** **`pytest`** (em conjunto com a biblioteca nativa `unittest.mock`).
+* **Por quê:** O `pytest` oferece uma sintaxe extremamente simples para declaração de testes (sem necessidade de classes complexas de suporte na maioria dos casos), suporte nativo para captura de exceções via `pytest.raises`, parameterized testing (`@pytest.mark.parametrize`) e relatórios detalhados quando um teste falha. O uso do `unittest.mock` permitiu isolar completamente a lógica e simular entradas de usuário (`input`) de forma automatizada.
+
+
+### b. Qual foi a maior dificuldade encontrada na criação dos testes?
+
+* A maior dificuldade foi **testar e isolar as funções de interface interativa** que dependem de entrada direta do usuário pelo terminal (como as funções de cancelamento dinâmico via `c` / `cancelar` e de fluxo de telas).
+* Para superar isso, foi necessário aplicar técnicas de **mocking** para interceptar chamadas do `builtins.input` e simular diferentes fluxos do usuário sem bloquear a execução contínua dos testes automatizados.
+
+
+### c. Por que testar apenas manualmente uma aplicação pode não ser suficiente?
+
+O teste manual possui limitações críticas:
+
+* **Escalabilidade e Tempo:** À medida que o sistema cresce, testar manualmente cada menu, subfluxo e caso limite (entradas inválidas, cancelamentos) torna-se excessivamente demorado.
+* **Propensão a Erros Humanos:** Um testador humano pode esquecer de checar determinado cenário ou ignorar casos de borda (*edge cases*), como digitar números negativos ou porcentagens acima de 100%.
+* **Ausência de Feedback Rápido:** Testes manuais não oferecem feedback imediato a cada alteração no código (*Regression Testing*), aumentando o risco de publicar erros não detectados.
+
+
+### d. Qual a diferença entre um teste que verifica um resultado correto e um teste que verifica uma situação de erro?
+
+* **Teste de Caminho Feliz (*Happy Path* / Resultado Correto):** Avalia se a aplicação entrega o resultado esperado quando recebe dados válidos (ex: verificar se R$ 50,00 * 2 resulta em R$ 100,00 ou se o desconto é aplicado corretamente). Seu objetivo é provar que a funcionalidade cumpre o seu requisito básico.
+* **Teste de Situação de Erro (*Negative Testing* / Tratamento de Exceções):** Avalia se a aplicação reage defensivamente e de forma previsível diante de dados inválidos ou inconsistentes (ex: garantir que passar preço negativo dispara um `ValueError`). Seu objetivo é provar que a aplicação é robusta, não "quebra" sem tratamento e não permite dados corrompidos.
+
+
+### e. Como os testes unitários podem ajudar durante a manutenção de um sistema?
+
+* **Prevenção de Regressão:** Garantem que alterações, refatorações ou novas funcionalidades não quebrem recursos que já estavam funcionando no passado.
+* **Rede de Segurança para Refatoração:** Permitem ao desenvolvedor melhorar a estrutura interna do código com a confiança de que, se algo for alterado indevidamente, os testes automatizados avisarão na mesma hora.
+* **Documentação Viva:** Funcionam como um guia prático de como as funções e classes devem se comportar, mostrando claramente entradas esperadas, saídas e exceções lançadas.
